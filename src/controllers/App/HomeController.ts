@@ -4,7 +4,7 @@ import YTDlpWrap from "yt-dlp-wrap";
 import { Request, Response, NextFunction } from "express";
 import path from "path";
 // बाइनरी का पाथ प्रोजेक्ट रूट के सापेक्ष 'bin' डायरेक्टरी में सेट करें।
-const ytDlpBinaryPath = path.join(process.cwd(), "yt-dlp");
+const ytDlpBinaryPath = path.join(process.cwd(), "bin", "yt-dlp");
 const ytdlp = new YTDlpWrap(ytDlpBinaryPath);
 export class HomeController {
   static async getDownloadUrl(req: Request, res: Response, next: NextFunction) {
