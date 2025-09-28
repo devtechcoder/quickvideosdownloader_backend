@@ -3,10 +3,11 @@ import _RS from "../../helpers/ResponseHelper";
 import YTDlpWrap from "yt-dlp-wrap";
 import { Request, Response, NextFunction } from "express";
 import path from "path";
-
-const ytDlpBinaryPath = path.join(__dirname, "../../../yt-dlp.exe"); // dist/controllers/App से प्रोजेक्ट रूट में bin/yt-dlp तक का पाथ
+// बाइनरी का पाथ प्रोजेक्ट रूट के सापेक्ष 'bin' डायरेक्टरी में सेट करें।
+const ytDlpBinaryPath = path.join(process.cwd(), "bin", "yt-dlp");
 console.log("ytDlpBinaryPath-->", ytDlpBinaryPath);
 const ytdlp = new YTDlpWrap(ytDlpBinaryPath);
+console.log("ytdlp-->", ytdlp);
 export class HomeController {
   static async getDownloadUrl(req: Request, res: Response, next: NextFunction) {
     const { videoUrl }: { videoUrl: string } = req.body;
@@ -24,6 +25,8 @@ export class HomeController {
         "--ignore-no-formats-error", // Don't error if only storyboards are found
         "--no-warnings",
       ]);
+
+      console.log("stdout-->", stdout);
 
       if (!stdout) {
         throw new Error("yt-dlp did not return any data. This might be due to login requirements or a private/invalid URL.");
