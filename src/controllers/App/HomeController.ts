@@ -14,6 +14,9 @@ export class HomeController {
     }
 
     try {
+      // Ensure yt-dlp binary is available
+      await ytdlp.getBinaryPath();
+
       console.log(`Fetching metadata for: ${videoUrl}`);
       // Correctly call yt-dlp to get JSON metadata
       const stdout = await ytdlp.execPromise([
