@@ -50,7 +50,7 @@ class Authentication {
           status: false,
           statusCode: 403,
           statusText: "JWT_EXPIRED",
-          message: "message" ? "JWT_EXPIRED" : "Un-authenticated Request!",
+          message: "JWT_EXPIRED",
         });
       }
       console.log(err, "errerr");
@@ -93,7 +93,7 @@ class Authentication {
         res.status(403).json({
           status: 403,
           statusText: "JWT_EXPIRED",
-          message: "message" ? "JWT_EXPIRED" : "Un-authenticated Request!",
+          message: "JWT_EXPIRED",
         });
       }
       return next(err);
