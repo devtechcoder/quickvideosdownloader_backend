@@ -4,7 +4,8 @@ import YTDlpWrap from "yt-dlp-wrap";
 import { Request, Response, NextFunction } from "express";
 import path from "path";
 
-const ytDlpBinaryPath = path.join(__dirname, "../../../bin/yt-dlp"); // dist/controllers/App से प्रोजेक्ट रूट में bin/yt-dlp तक का पाथ
+const ytDlpBinaryPath = path.join(__dirname, "../../../yt-dlp.exe"); // dist/controllers/App से प्रोजेक्ट रूट में bin/yt-dlp तक का पाथ
+console.log("ytDlpBinaryPath-->", ytDlpBinaryPath);
 const ytdlp = new YTDlpWrap(ytDlpBinaryPath);
 export class HomeController {
   static async getDownloadUrl(req: Request, res: Response, next: NextFunction) {
