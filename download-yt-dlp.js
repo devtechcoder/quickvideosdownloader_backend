@@ -8,7 +8,7 @@ if (!fs.existsSync(ytDlpBinaryDir)) {
   fs.mkdirSync(ytDlpBinaryDir, { recursive: true });
 }
 console.log(`Attempting to download yt-dlp to: ${ytDlpBinaryPath}`);
-YTDlpWrap.downloadFromGithub(ytDlpBinaryPath)
+YTDlpWrap.downloadFromGithub(ytDlpBinaryPath) // यह सही तरीका है
   .then(() => {
     console.log("yt-dlp downloaded successfully!");
     // Linux/macOS पर एक्जीक्यूट करने की अनुमति सेट करें
