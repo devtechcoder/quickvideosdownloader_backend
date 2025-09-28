@@ -1,4 +1,4 @@
-const YTDlpWrap = require("yt-dlp-wrap");
+const YTDlpWrap = require("yt-dlp-wrap").default;
 const path = require("path");
 const fs = require("fs");
 const ytDlpBinaryDir = path.join(__dirname, "bin"); // प्रोजेक्ट रूट में 'bin' डायरेक्टरी
