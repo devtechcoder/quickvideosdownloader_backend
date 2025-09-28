@@ -47,7 +47,7 @@ Thumbs.db
 
 # Applications
 *.app
-*.exe
+# *.exe
 *.war
 
 # Large media files (optional if you store media in cloud storage)
