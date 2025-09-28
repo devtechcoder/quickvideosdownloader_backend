@@ -2,9 +2,10 @@ import * as mongoose from "mongoose";
 import _RS from "../../helpers/ResponseHelper";
 import YTDlpWrap from "yt-dlp-wrap";
 import { Request, Response, NextFunction } from "express";
+import path from "path";
 
-const ytdlp = new YTDlpWrap();
-
+const ytDlpBinaryPath = path.join(__dirname, "../../../bin/yt-dlp"); // dist/controllers/App से प्रोजेक्ट रूट में bin/yt-dlp तक का पाथ
+const ytdlp = new YTDlpWrap(ytDlpBinaryPath);
 export class HomeController {
   static async getDownloadUrl(req: Request, res: Response, next: NextFunction) {
     const { videoUrl }: { videoUrl: string } = req.body;
@@ -14,9 +15,6 @@ export class HomeController {
     }
 
     try {
-      // Ensure yt-dlp binary is available
-      await ytdlp.getBinaryPath();
-
       console.log(`Fetching metadata for: ${videoUrl}`);
       // Correctly call yt-dlp to get JSON metadata
       const stdout = await ytdlp.execPromise([

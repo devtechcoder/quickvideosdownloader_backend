@@ -1,11 +1,11 @@
 import * as dotenv from "dotenv";
 dotenv.config({ path: "./.env" });
-import * as express from "express";
-import * as mongoose from "mongoose";
-import * as cors from "cors";
+import express, { Request, Response } from "express";
+import mongoose from "mongoose";
+import cors from "cors";
 import { env } from "./environments/Env";
 import Routes from "./routes/Routes";
-import { NextFunction } from "express";
+import { NextFunction } from "express"; // यह अब express इम्पोर्ट से आ रहा है, इसलिए इसे हटाया जा सकता है
 import YTDlpWrap from "yt-dlp-wrap";
 import path = require("path");
 import { ReqInterface, ResInterface } from "./interfaces/RequestInterface";
@@ -21,7 +21,6 @@ export class Server {
     this.setConfigurations();
     this.setRoutes();
     this.error404Handler();
-    this.setupYTDlp();
     this.handleErrors();
   }
 
@@ -29,16 +28,6 @@ export class Server {
     this.setMongodb();
     this.enableCors();
     this.configBodyParser();
-  }
-
-  async setupYTDlp() {
-    try {
-      console.log("Checking for yt-dlp binary...");
-      await YTDlpWrap.downloadFromGithub();
-      console.log("yt-dlp binary is up to date.");
-    } catch (error) {
-      console.error("Failed to download or update yt-dlp binary:", error);
-    }
   }
 
   setMongodb() {
