@@ -8,7 +8,7 @@
     "build": "tsc",
     "doc": "apidoc -i src -o apidoc",
     "start": "node dist/index.js",
-    "postinstall": "npx yt-dlp-wrap --update && chmod +x ./yt-dlp"
+    "postinstall": "node ./node_modules/yt-dlp-wrap/dist/cli.js --update && chmod +x ./yt-dlp"
   },
   "author": "Shivraj jajra",
   "license": "ISC",
