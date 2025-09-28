@@ -12,8 +12,8 @@ dist/
 build/
 
 # Compiled JavaScript files and source maps
-*.js
 *.js.map
+!scripts/download-yt-dlp.js # Allow this specific script
 
 # Compiled TypeScript files
 *.tsbuildinfo
@@ -66,3 +66,6 @@ Thumbs.db
 # Lock files (optional depending on your package manager)
 /yarn.lock
 /package-lock.json
+
+# Downloaded binaries
+bin/
