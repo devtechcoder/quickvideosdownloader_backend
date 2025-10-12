@@ -13,7 +13,7 @@ class Routes {
   }
 
   app() {
-    this.router.use("/app/getUrl", HomeRouter);
+    this.router.use("/app", HomeRouter);
   }
 
   common() {

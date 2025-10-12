@@ -77,32 +77,51 @@ export class Server {
 
     this.app.use("/api", Routes);
 
-    // 2. यह एंडपॉइंट फाइल को डाउनलोड करने के लिए प्रॉक्सी का काम करेगा
-    this.app.get("/api/proxy-download", async (req, res) => {
-      const { url, title, format } = req.query;
-
-      if (!url || typeof url !== "string") {
-        return res.status(400).send("URL is required and must be a string.");
-      }
-
+    this.app.get("/proxy-download", async (req, res) => {
       try {
+        const { url, title, format } = req.query;
+
+        if (!url || !title || !format) {
+          return res.status(400).send("Missing required query parameters: url, title, format");
+        }
+
+        // 1. रिमोट URL से फ़ाइल स्ट्रीम प्राप्त करें
         const response = await axios({
           method: "get",
           url: decodeURIComponent(url as string),
           responseType: "stream",
         });
 
-        const fileName = `${title || "download"}.${format || "mp4"}`;
-        res.setHeader("Content-Disposition", `attachment; filename="${fileName}"`);
+        // 2. Content-Disposition हेडर को सही ढंग से सेट करें
+        const decodedTitle = decodeURIComponent(url as string);
+
+        // ASCII-ओनली फॉलबैक फ़ाइलनेम बनाएँ
+        const fallbackFilename = decodedTitle.replace(/[^\x00-\x7F]/g, "_").replace(/[\\/:*?"<>|]/g, "_");
+
+        // UTF-8 एनकोडेड फ़ाइलनेम बनाएँ
+        const utf8Filename = encodeURIComponent(decodedTitle);
+
+        // हेडर सेट करें: इसमें एक फॉलबैक और एक UTF-8 वर्शन दोनों शामिल हैं
+        res.setHeader("Content-Disposition", `attachment; filename="${fallbackFilename}.${format}"; filename*=UTF-8''${utf8Filename}.${format}`);
+
+        // 3. Content-Type और Content-Length हेडर सेट करें (यदि उपलब्ध हो)
+        if (response.headers["content-type"]) {
+          res.setHeader("Content-Type", response.headers["content-type"]);
+        }
+        if (response.headers["content-length"]) {
+          res.setHeader("Content-Length", response.headers["content-length"]);
+        }
+
+        // 4. फ़ाइल स्ट्रीम को क्लाइंट को पाइप करें
         response.data.pipe(res);
       } catch (error) {
         console.error("Proxy download error:", error.message);
-        res.status(500).send("Failed to download the file.");
+        res.status(500).send("Failed to download the file via proxy.");
       }
     });
 
     // 3. यह एंडपॉइंट इमेज को प्रॉक्सी करने के लिए है ताकि CORS की समस्या न हो
-    this.app.get("/api/proxy-image", async (req, res) => {
+    this.app.get("/proxy-image", async (req, res) => {
       const { url } = req.query;
 
       if (!url || typeof url !== "string") {
