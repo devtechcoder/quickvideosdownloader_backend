@@ -1,5 +1,6 @@
 import axios from "axios";
 import { Request, Response, NextFunction } from "express";
+import { CONFIG } from "../../environments/config";
 
 export class HomeController {
   static async getDownloadUrl(req: Request, res: Response, next: NextFunction) {
@@ -16,7 +17,7 @@ export class HomeController {
         url: videoUrl,
       },
       headers: {
-        "x-rapidapi-key": "9131f27512msh0873404bc0ebcc0p1d4506jsn508e16e41fbd", // <-- Move to .env file
+        "x-rapidapi-key": CONFIG.RAPID_API_KEY,
         "x-rapidapi-host": "all-in-one-media-downloader-api.p.rapidapi.com",
       },
     };
@@ -24,6 +25,8 @@ export class HomeController {
     try {
       console.log(`Fetching data from RapidAPI for: ${videoUrl}`);
       const response = await axios.request(options);
+
+      console.log("RapidAPI response:", response);
 
       // The response from the RapidAPI is sent directly.
       // You may need to adapt this data structure on your frontend.
@@ -40,6 +43,7 @@ export class HomeController {
         return res.status(error.response.status).json({
           success: false,
           error: "Failed to fetch media information from the external service.",
+          errorInfo: error,
           details: error.response.data,
         });
       }
